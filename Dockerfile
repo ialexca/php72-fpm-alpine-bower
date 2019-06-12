@@ -2,15 +2,15 @@ FROM php:7.2-fpm-alpine
 
 RUN apk update && apk upgrade && \
     apk add --no-cache \
-	  bash \
-	  openssh \
-	  zip \
+    bash \
+    openssh \
+    zip \
     jpegoptim optipng pngquant gifsicle \
     mysql-client \
     freetype-dev \
     libjpeg-turbo-dev \
     libpng-dev
-	  #\
+    #\
     #gettext
 
 # Install Git
@@ -45,7 +45,7 @@ RUN ln -sf /usr/share/zoneinfo/America/Toronto /etc/localtime
 RUN echo "America/Toronto" >  /etc/timezone
 ENV TZ America/Toronto
 ENV LANG en_CA.UTF-8
-ENV LANGUAGE en_CA.UTF-8:en
+ENV LANGUAGE en_CA.UTF-8
 ENV LC_ALL en_CA.UTF-8
 
 # Install PHP extensions
@@ -59,8 +59,12 @@ RUN docker-php-ext-install gd
 # Install NodeJS
 RUN apk add --no-cache --update nodejs nodejs-npm
 
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+
 # Install Bower globally
 RUN npm install -g bower
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Set the build place
+WORKDIR /var/www/html
